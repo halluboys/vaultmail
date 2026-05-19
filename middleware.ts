@@ -25,10 +25,9 @@ export function middleware(request: NextRequest) {
   }
 
   const authCookie = request.cookies.get(AUTH_COOKIE)?.value;
-  const expectedToken = Buffer.from(
+  const expectedToken = btoa(
     `${process.env.AUTH_USERNAME}:${process.env.AUTH_PASSWORD}`
-  )
-    .toString('base64');
+  );
 
   if (authCookie === expectedToken) {
     return NextResponse.next();
