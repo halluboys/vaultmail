@@ -1,6 +1,6 @@
 import { storage } from '@/lib/storage';
 import { DOMAINS_SETTINGS_KEY } from '@/lib/admin-auth';
-import { DEFAULT_DOMAIN_FALLBACK } from '@/lib/config';
+import { DEFAULT_DOMAIN_FALLBACK, DEFAULT_DOMAINS } from '@/lib/config';
 
 type DomainsPayload = {
   domains: string[];
@@ -42,8 +42,9 @@ export const getStoredDomains = async () => {
 
 export const getDomainsWithFallback = async () => {
   const storedDomains = await getStoredDomains();
-  if (storedDomains.length > 0) {
-    return storedDomains;
+  const merged = normalizeDomains([...storedDomains, ...DEFAULT_DOMAINS]);
+  if (merged.length > 0) {
+    return merged;
   }
   return [DEFAULT_DOMAIN_FALLBACK];
 };
